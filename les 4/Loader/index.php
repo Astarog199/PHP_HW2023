@@ -1,17 +1,25 @@
 <?php
-        if (!empty($_FILES)) {
-            $path = "upload/" . $_FILES['myfile']['name'];
-            if (move_uploaded_file($_FILES['myfile']['tmp_name'], $path)) {
-                $message = "Файл загружен!";
-            }else{
-                $message = "Ошибка загрузки";
-            }
-            header("Location: index.php");
-            die();
-        }
-        
+$messages = [
+    'ok' => 'Файл загружен',
+    'error' => 'Ошибка загрузки',
+];
 
+    if (!empty($_FILES)) {
+        $path = "upload/" . $_FILES['myfile']['name'];
+
+        // проверка на безопасность
+
+        if (move_uploaded_file($_FILES['myfile']['tmp_name'], $path)) {
+        $message = "ok";
+         } else {
+            $message = "error";
+        }
+        header("Location: index.php?status=$message");
+        die();
+    }
+    $message = $messages[$_GET['status']];
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
